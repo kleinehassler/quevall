@@ -1,0 +1,40 @@
+To Me
+ Jan 10
+Hola Kleine, disculpa el atraso, hice un reporte q te puede ayudar con el analisis de costos, para poder obtener este reporte es necesario esta funcion de posgres, q calcula el ultimo costo de compra para cada item, dependiendo de la fecha ingresada.
+
+CREATE OR REPLACE FUNCTION devultcos(idi integer, fec date)
+  RETURNS double precision AS
+$BODY$select punitario-descuento/ qty as precio 
+from vdocusmall p left join vdocui d on (p.code=d.code)
+where fecha<=$2 and  iditem=$1 and not isanulado and iddocu in 
+	(select distinct d.iddocu 
+	 from gdoc g, dgdoc t, docuse d    
+	 where g.tag='ANXCOM' and g.idgdoc=t.idgdoc and t.dtag=d.dtag ) 
+order by fecha desc
+limit 1$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100;
+ALTER FUNCTION devultcos(integer, date)
+  OWNER TO postgres;
+
+esta en la version 9.1.
+
+Y esta misma funcion la podemos utilizar en el formulario inv0209a en la siguiente consulta.
+
+q1="select i.iditem, i.icode as codigo, i.iname as articulo, i.unidad, sum(qty) as qty, "+;
+		"sum(round((case when i.artcosto<=0 or i.artcosto>punitario then devultcos(i.iditem,"+alup(.ftoy)+") else i.artcosto end*qty)::numeric,2))::float4 as total "+;
+		"from vdocusmall d left join vdocui i on (d.code=i.code) "+;
+						"  left join items m on (i.iditem=m.iditem) "+;
+		"where "+ f+" and "+fcont+" and not isanulado "+;
+			"and iddocu in (select distinct d.iddocu from gdoc g, dgdoc t, docuse d "+;   
+						" where g.tag="+alup(thisform.cgdoc2)+" and g.idgdoc=t.idgdoc and t.dtag=d.dtag )"+;
+		" group by i.iditem, i.icode, i.iname, i.unidad "
+
+
+tambien te paso un formulario para el recalculo de costos en los descargos de inventario.
+
+disculpa el atraso.
+
+Saludos.
+
+Daniel

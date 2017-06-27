@@ -1,0 +1,9 @@
+SUEL  ==> sueldo mensual
+
+IESS  ==> SEGURO SOCIAL	      ==> (SUEL+HORX+VACG)*0.0935
+
+XXIII ==> decimo tercero      ==> SUEL/12
+
+IMPR  ==> impuesto a la renta ==>
+
+iif(SUEL>2616.17,(SUEL-2616.17)*0.15+163.58,iif(SUEL>1308.33, (SUEL-1308.33)*0.1+32.75,iif(SUEL>654.17,(SUEL-654.17)*.05,0)))

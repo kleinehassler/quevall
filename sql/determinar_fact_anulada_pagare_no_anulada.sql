@@ -1,0 +1,1 @@
+select * from vdocusmall where dtag='PAGAREVENT' and NOT isanulado AND LINKDOC IN (SELECT CODE FROM VDOCUMENTS WHERE DTAG='FACTURAA' AND isanulado ) ORDER BY LINKDOC, CODE;

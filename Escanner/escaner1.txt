@@ -1,0 +1,30 @@
+
+DECLARE INTEGER TWAIN_SelectImageSource IN 'C:\Eztw32.DLL' INTEGER hWnd 
+DECLARE INTEGER TWAIN_GetSourceList IN 'C:\Eztw32.DLL' 
+DECLARE INTEGER TWAIN_GetNextSourceName IN 'C:\Eztw32.DLL' STRING @cSourceName 
+DECLARE INTEGER TWAIN_OpenSource IN 'C:\Eztw32.DLL' STRING cSourceName 
+DECLARE INTEGER TWAIN_AcquireNative IN 'C:\Eztw32.DLL' INTEGER nAppWind, INTEGER nPixelTypes 
+DECLARE INTEGER TWAIN_WriteNativeToFilename IN 'C:\Eztw32.DLL' INTEGER nDIB, STRING cFilename 
+DECLARE INTEGER TWAIN_FreeNative IN 'C:\Eztw32.DLL' INTEGER nDIB 
+DECLARE INTEGER TWAIN_SetMultiTransfer IN 'C:\Eztw32.DLL' INTEGER nFlag 
+LOCAL lcFile, lnImageHandle, lnReply 
+
+lcFile = 'c:\prueba.JPG' 
+
+* Captura la imágen 
+lnImageHandle = TWAIN_AcquireNative(0,0) 
+* copia la imagen a un archivo 
+lnReply = ; 
+TWAIN_WriteNativeToFilename(lnImageHandle,lcFile) 
+* Libera la memoria del manejador de la imágen 
+TWAIN_FreeNative(lnImageHandle) 
+* Chequear errores 
+IF lnReply = 0 
+MESSAGEBOX(' * Scaneado Exitoso') 
+ELSE 
+MESSAGEBOX(' * Algo NO Estuvo Bien',0,'Revise Scaner') 
+ENDIF 
+
+El archivo Eztw32.DLL debes bajarlo desde google...busquelo 
+
+Saludo

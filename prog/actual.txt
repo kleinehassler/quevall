@@ -1,0 +1,500 @@
+
+ALTER TABLE docuse ADD COLUMN iscero boolean DEFAULT 'f';
+ALTER TABLE periodos ADD COLUMN cajero integer DEFAULT 0;
+
+ALTER TABLE sujetos ALTER calific TYPE character varying(2);
+ALTER TABLE sujetos
+   ALTER COLUMN calific DROP DEFAULT;
+
+
+ALTER TABLE periodos ADD COLUMN swclilis boolean DEFAULT 'f';
+
+CREATE TABLE rutas
+(
+   idrutas serial, 
+   ruta integer NOT NULL, 
+   vendedor integer NOT NULL, 
+   ciudad integer NOT NULL, 
+   CONSTRAINT pk_rutas PRIMARY KEY (idrutas)
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+
+num fact campoverde 75825
+
+CREATE TABLE rutdis
+(
+  idrutdis serial NOT NULL,
+  ruta integer NOT NULL,
+  vendedor integer NOT NULL,
+  CONSTRAINT pk_rutdis PRIMARY KEY (idrutdis)
+)
+
+
+ALTER TABLE documents ADD COLUMN efectivo double precision DEFAULT 0;
+ALTER TABLE documents ADD COLUMN caja double precision DEFAULT 0;
+
+ALTER TABLE usuarios ADD COLUMN ptovta boolean DEFAULT 'false';
+
+****************************************************************************
+
+
+ALTER TABLE asientosdia ADD CONSTRAINT uk_asientosdia UNIQUE (code);
+
+
+******
+
+ALTER TABLE items ADD COLUMN cntbulto integer;
+
+
+*************************************************************************
+
+
+ALTER TABLE imagenrep ADD COLUMN proceso bool DEFAULT 'f';
+
+
+ALTER TABLE auditoria ADD COLUMN nomdoc varchar(25);
+ALTER TABLE auditoria ADD COLUMN observa varchar(200);
+
+ alter table usuarios add printasic bool DEFAULT false;
+ alter table usuarios add confimp bool DEFAULT true;
+ 
+ alter table imagenrep add proceso bool DEFAULT false;
+ 
+ ALTER TABLE auditoria ADD COLUMN campo varchar(100);
+ALTER TABLE auditoria ADD COLUMN valorant varchar(250);
+ALTER TABLE auditoria ADD COLUMN valoract varchar(250);
+
+
+
+ALTER TABLE items ADD COLUMN descripi character varying(200);
+
+
+
+ALTER TABLE items ADD COLUMN esaprox boolean DEFAULT 'f';
+
+
+
+ALTER TABLE saldosb ADD COLUMN salestcta double precision NOT NULL DEFAULT 0;
+
+
+
+*******************************************************************************
+*******************************************************************************
+
+CREATE TABLE autprecio
+(
+  idautprecio serial NOT NULL,
+  idsujeto integer NOT NULL,
+  tipo smallint DEFAULT 0,
+  lista integer DEFAULT 0,
+  CONSTRAINT pk_autprecio PRIMARY KEY (idautprecio),
+  CONSTRAINT fk_sujetos FOREIGN KEY (idsujeto)
+      REFERENCES sujetos (idsujeto) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT uk_autprecio UNIQUE (idsujeto)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE autprecio OWNER TO postgres;
+
+* CONSULTA SI TIENE AUTORIZACION
+			q1="select tipo, lista from autprecio where idsujeto="+alup(idu)
+			if !sqli(q1,'autpre')
+				return
+			endif
+
+*CONSULTA DE QUE TIPO DE AUTORIZACION TIENE
+
+q1="select tipo from autprecio where idsujeto="+alup(idu)
+if !sqli(q1,'autpre')
+	return
+endif
+
+* SI ES SOLO 1 DOCUMENTO, BORRAR LA AUTORIZACION
+if reccount('autpre')=1
+	if autpre.tipo=1
+		q1="delete from autprecio where idsujeto="+alup(idu)
+		=sqli(q1)
+	endif	
+endif
+
+**********************************
+* Para Visualizar Autorizaciones
+*********************************
+ALTER TABLE autprecio ADD COLUMN montototal double precision;
+ALTER TABLE autprecio ADD COLUMN montocredito double precision;
+ALTER TABLE autprecio ADD COLUMN cliente integer;
+ALTER TABLE autprecio ADD COLUMN codedoc integer NOT NULL DEFAULT 0;
+
+***********************************
+** Cambio TABLAS ANEXO ATS 2013
+*************************************
+
+ALTER TABLE empresas ADD COLUMN numestb integer DEFAULT 0;
+
+ALTER TABLE sujetos ADD COLUMN tipdocextraj integer;
+
+ALTER TABLE aneiva ADD COLUMN fptipori integer;
+ALTER TABLE aneiva ADD COLUMN fppaispag integer;
+ALTER TABLE aneiva ADD COLUMN fpcondbtri integer;
+ALTER TABLE aneiva ADD COLUMN fpretnolega integer;
+ALTER TABLE aneiva ADD COLUMN forpag1 integer;
+ALTER TABLE aneiva ADD COLUMN forpag2 integer;
+ALTER TABLE aneiva ADD COLUMN forpag3 integer;
+
+CREATE TABLE aneivarg
+(
+   code integer, 
+   tipocomp integer, 
+   idproveedor integer, 
+   serie integer, 
+   secuencia integer, 
+   autoriza bigint, 
+   fecemi date, 
+   base0 double precision, 
+   base12 double precision, 
+   montoiva double precision
+) 
+WITH (
+  OIDS = FALSE
+)
+;
+
+
+ALTER TABLE aneivarg ADD CONSTRAINT pk_code PRIMARY KEY (code);
+
+*******************************************
+** Contenido de Tablas GRUDAT y DETAGRU
+*******************************************
+
+INSERT INTO grudat (idgrupo, descripgru, gtag, tipo, gtable) VALUES (248, 'TIPO DE SUJETO EXTRANJERO', 'TSEX', 'G', 'TSUJEXT');
+*INSERT INTO grudat (idgrupo, descripgru, gtag, tipo, gtable) VALUES (249, 'FORMA DE PAGO TIPO', 'FPTP', 'G', 'FPTPLE');
+*INSERT INTO grudat (idgrupo, descripgru, gtag, tipo, gtable) VALUES (251, 'FORMA DE PAGO ANEXO', 'FPAX', 'G', 'FPANEXOS');
+
+
+INSERT INTO detagru (idgrupo, iddato, descripda, valorda) VALUES (248, 14094, 'PERSONA NATURAL', '01');
+INSERT INTO detagru (idgrupo, iddato, descripda, valorda) VALUES (248, 14095, 'SOCIEDAD', '02');
+
+*** para SRITABLA ****
+INSERT INTO detagru (idgrupo, iddato, descripda, valorda) VALUES (201, 14096, 'FORMA DE PAGO DOCUMENTOS', '');
+
+***********
+fconsultas.prg ** funcion sritablas
+**********
+case arg='FPAX'
+	return sqli("select * "+;
+		"from vsritabla "+;
+		"where trim(both ' ' from tabla)='FORMA DE PAGO DOCUMENTOS' "+;
+		"order by codigo;",'formaPago')
+
+***** SRITABLA FORMA DE PAGO
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (185, 1, 'SIN UTILIZACION DEL SISTEMA FINANCIERO', 0, 0, 14096, 1);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (186, 2, 'CHEQUE PROPIO', 0, 0, 14096, 2);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (187, 3, 'CHEQUE CERTIFICADO', 0, 0, 14096, 3);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (188, 4, 'CHEQUE DE GERENCIA', 0, 0, 14096, 4);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (189, 5, 'CHEQUE DEL EXTERIOR', 0, 0, 14096, 5);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (190, 6, 'DEBITO DE CUENTA', 0, 0, 14096, 6);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (191, 7, 'TRANSFERENCIA PROPIO BANCO', 0, 0, 14096, 7);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (192, 8, 'TRANSFERENCIA OTRO BANCO NACIONAL', 0, 0, 14096, 8);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (193, 9, 'TRANSFERENCIA  BANCO EXTERIOR', 0, 0, 14096, 9);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (194, 10, 'TARJETA DE CREDITO NACIONAL', 0, 0, 14096, 10);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (195, 11, 'TARJETA DE CREDITO INTERNACIONAL', 0, 0, 14096, 11);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (196, 12, 'GIRO', 0, 0, 14096, 12);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (197, 13, 'DEPOSITO EN CUENTA (CORRIENTE/AHORROS)', 0, 0, 14096, 13);
+INSERT INTO sritabla (idsritabla, codigo, descrip, anio, mes, iddato, valor) VALUES (198, 14, 'ENDOSO DE INVERSION', 0, 0, 14096, 14);
+
+
+*********************
+Cambios de Vista VDOCUMENTS
+
+SELECT DISTINCT d.idugra, d.fecgra, d.code, d.succode, d.depcode, d.usercaja, d.userstore, d.num, d.idsecudoc, d.cliente, d.fecha, d.pdocode, d.ffrom, d.fto, d.seller, d.casher, d.linkdoc, d.sujter, d.auxitem, d.duracion, d.taza, d.valcuota, d.numcuota, d.numcajas, d.poriva, d.descuconiva, d.descusiniva, d.recargo, d.recargo2, d.recargo3, d.flete, d.subconiva, z.tipitem, d.chofer, f.sname AS chname, f.scedula AS chcedula, f.sruc AS chruc, d.nrec, d.comenanu, d.subsiniva, d.subtotal, d.ivavalor, d.ivabienes, d.icevalor, d.ipsvalor, d.montototal, d.saldo, d.tmpsaldo, d.isguia, d.isupdate, d.islock, d.isprint, d.isaccount, d.isbodega, d.ispagado, d.isanulado, d.isautorizado, d.isreversado, d.concepto, k.afecha AS feccon, b.descripda AS bodega, z.tipsaldo, z.iddocu, z.nomdoc, z.iscero, z.dtag, z.swaneiva, z.tipnum, z.swkar, z.swconta, z.idsritabla, z.ajucon, d.serie, d.numauto, d.fcaducidad, s.scel, s.stelf, s.saddr, s.saddr2, s.scode, s.ssri, s.sname, s.sruc, s.scedula, ci.descripda AS sciudad, s.spasaporte, j.sname AS vendedor, u.sname AS nombreu, u.observ, monedas.moname AS moneda, d.pflag, d.dflag, d.idws, q.reporte, q.proceso, q.impresora, t.scode AS codter, t.sname AS nombret, z.isdevo, z.istransfer, z.documentos, 0 AS codprin, 0 AS codgar, ''::text AS principal, ''::text AS garante, r.sname AS recaudador, 0 AS idprin, 0 AS idgar, c2.descripda AS ciudad2, s.diasplz, a.sname AS cajero, i.descripda AS parroquia, e.descripda AS sector, v.descripda AS provincia, s.calific, s.sforpag, z.cretri, 
+     x.descripda AS tipdocextraj, s.issocio
+   FROM documents d
+   LEFT JOIN detagru b ON d.userstore = b.iddato
+   LEFT JOIN asientosdia k ON d.code = k.code
+   LEFT JOIN vsecudoc z ON d.idsecudoc = z.idsecudoc
+   LEFT JOIN imagenrep q ON z.idimage = q.idimage
+   LEFT JOIN sujetos u ON d.idugra = u.idsujeto
+   LEFT JOIN periodos o ON d.pdocode = o.pdocode
+   LEFT JOIN monedas ON o.moneda = monedas.mocode
+   LEFT JOIN sujetos s ON d.cliente = s.idsujeto
+   LEFT JOIN sujetos j ON d.seller = j.idsujeto
+   LEFT JOIN sujetos r ON d.casher = r.idsujeto
+   LEFT JOIN detagru ci ON s.sciudad = ci.iddato
+   LEFT JOIN detagru c2 ON s.sciudad2 = c2.iddato
+   LEFT JOIN detagru i ON s.parroquia = i.iddato
+   LEFT JOIN detagru e ON s.sector = e.iddato
+   LEFT JOIN detagru v ON s.sprov = v.iddato
+   LEFT JOIN sujetos a ON d.usercaja = a.idsujeto
+   LEFT JOIN sujetos t ON d.sujter = t.idsujeto
+   LEFT JOIN sujetos f ON d.chofer = f.idsujeto
+   LEFT JOIN detagru x on s.tipdocextraj = x.iddato;
+
+
+*******
+Cambio VSUJETOS
+CREATE OR REPLACE VIEW vsujetos AS
+SELECT s.scode AS codigo, s.sname AS nombre, s.ssri AS razon_soc, s.scedula AS cedula, s.sruc AS ruc, s.svendedor, s.spasaporte AS pasaporte, s.isempleado AS es_empleado, s.isproveedor AS es_proveedor, s.iscliente AS es_cliente, s.activo, s.issocio AS es_socio, c.descripda AS ciudad, p.descripda AS provincia, t.descripda AS tipo_cli, s.saddr AS direccion, s.idsujeto, b.sname AS principal, '' AS garante, b.idsujeto AS idprin, 0 AS idgar, s.diasplz, s.srepre, s.scredito, s.scheques, s.calific, s.observ, u.descripda AS ciudad2, t.descripda AS parroquia, e.descripda AS sector, v.idsujeto AS idven, v.sname AS vendedor, x.descripda as ntipdocextraj 
+   FROM sujetos s
+   LEFT JOIN detagru c ON s.sciudad = c.iddato
+   LEFT JOIN detagru u ON s.sciudad2 = u.iddato
+   LEFT JOIN detagru p ON s.sprov = p.iddato
+   LEFT JOIN detagru t ON s.tipcli = t.iddato
+   LEFT JOIN detagru r ON s.parroquia = r.iddato
+   LEFT JOIN detagru e ON s.sector = e.iddato
+   LEFT JOIN detagru x on s.tipdocextraj=x.iddato
+   LEFT JOIN rutas f ON s.sector = f.ruta
+   LEFT JOIN sujetos v ON f.vendedor = v.idsujeto
+   LEFT JOIN sujetos b ON s.codprin = b.idsujeto;;
+
+*************
+DETAGRU *  PAISES
+**************
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ALEMANIA','202');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ARGENTINA','101');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'AUSTRALIA','501');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'AUSTRIA','203');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BELGICA','204');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BELICE','135');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BENIN','429');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BERMUDA','142');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BIELORRUSIA','596');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BOLIVIA','102');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BOSNIA Y HERZEGOVINA','242');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BRASIL','103');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'BULGARIA','205');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CANADA','104');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CHILE','108');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CHINA POPULAR','331');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CHIPRE','332');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'COLOMBIA','105');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'COREA DEL SUR','330');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'COREA NORTE','306');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'COSTA DE MARFIL','432');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'COSTA RICA','106');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CROACIA','243');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CUBA','107');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'CURAZAO','127');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'DINAMARCA','208');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'DOMINICA','136');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ECUADOR','593');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'EGIPTO','434');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'EL SALVADOR','123');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ESLOVAQUIA','252');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ESLOVENIA','244');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ESPAÑA','209');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ESTADOS UNIDOS','110');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'FINLANDIA','212');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'FRANCIA','211');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'GRECIA','214');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'GUATEMALA','111');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'GUYANA','132');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'GUYANA FRANCESA','144');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'HAITI','112');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'HONDURAS','113');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'HONG KONG','354');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'HUNGRIA','216');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'INDIA','309');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'INDONESIA','310');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'IRAK','311');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'IRLANDA','217');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ISLANDIA','218');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ISRAEL','313');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'ITALIA','219');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'JAMAICA','114');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'JAPON','314');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'JORDANIA','315');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'KAZAJSTAN','348');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'KUWAIT','316');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LATVIA','601');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LETONIA','248');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LIBANO','318');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LIBIA','602');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LIECHTENSTEIN','234');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LITUANIA','249');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'LUXEMBURGO','220');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'MACEDONIA','251');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'MALTA','221');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'MEXICO','116');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'MONACO','235');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'NICARAGUA','117');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'NORUEGA','222');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'NUEVA ZELANDA','503');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PAISES BAJOS (HOLANDA)','215');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PALESTINA','353');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PANAMA','118');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PARAGUAY','119');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PERU','120');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'POLONIA','223');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PORTUGAL','224');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'PUERTO RICO','121');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'REINO UNIDO','213');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'REPUBLICA CHECA','599');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'REPUBLICA DOMINICANA','122');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'RUSIA','230');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'SAN MARINO','237');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'SERBIA','688');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'SINGAPUR','338');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'SUECIA','226');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'SUIZA','227');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'TAILANDIA','325');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'TAIWAN (CHINA)','307');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'TRINIDAD Y TOBAGO','124');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'TUNEZ','452');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'TURQUIA','346');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'UCRANIA','229');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'URUGUAY','125');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'UZBEKISTAN','352');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'VATICANO (SANTA SEDE)','238');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'VENEZUELA','126');
+INSERT INTO detagru (idgrupo, descripda, valorda) VALUES (10,'VIETNAM','341');
+
+*****
+
+
+ALTER TABLE aneivarg DROP CONSTRAINT pk_code;
+
+*****************
+
+ALTER TABLE usuarios ADD COLUMN confimp integer;
+ALTER TABLE usuarios ADD COLUMN printasic integer;
+
+
+
+****************************
+*** Facturacion Electronica
+****************************
+
+ALTER TABLE documents ADD COLUMN isxmlenv boolean DEFAULT false;
+ALTER TABLE documents ADD COLUMN isxmlres boolean DEFAULT false;
+
+ALTER TABLE documents ADD COLUMN isxmlcon boolean DEFAULT false;
+ALTER TABLE documents ADD COLUMN xmlclave varchar(50);
+ALTER TABLE documents ADD COLUMN xmlautor varchar(50);
+
+
+
+
+CREATE OR REPLACE VIEW vdocxml1 AS 
+ SELECT DISTINCT d.idugra, d.fecgra, d.code, d.succode, d.depcode, d.usercaja, d.userstore, d.num, d.idsecudoc, 
+d.cliente, d.fecha, d.pdocode, d.ffrom, 
+d.fto, d.seller, d.casher, d.linkdoc, d.sujter, d.auxitem, d.duracion, d.taza, d.valcuota, d.numcuota, d.numcajas, d.poriva, d.descuconiva, 
+d.descusiniva, d.recargo, d.recargo2, 
+d.recargo3, d.flete, d.subconiva, z.tipitem, d.chofer, f.sname AS chname, f.scedula AS chcedula, 
+f.sruc AS chruc, d.nrec, d.comenanu, d.subsiniva, d.subtotal, d.ivavalor, d.ivabienes, d.icevalor, 
+d.ipsvalor, d.montototal, d.saldo, d.tmpsaldo, d.isguia, d.isupdate, d.islock, d.isprint, d.isaccount, 
+d.isbodega, d.ispagado, d.isanulado, d.isautorizado, d.isreversado, 
+d.concepto, k.afecha AS feccon, b.descripda AS bodega, z.tipsaldo, z.iddocu, z.nomdoc, z.iscero, z.dtag, 
+z.swaneiva, z.tipnum, z.swkar, z.swconta, z.idsritabla, z.ajucon, d.serie, d.numauto, d.fcaducidad, 
+s.scel, s.stelf, s.saddr, s.saddr2, s.scode, s.ssri, s.sname, s.sruc, s.scedula, ci.descripda AS sciudad,
+s.spasaporte, j.sname AS vendedor, u.sname AS nombreu, u.observ, monedas.moname AS moneda, d.pflag, 
+d.dflag, d.idws, q.reporte, q.proceso, q.impresora, t.scode AS codter, t.sname AS nombret, z.isdevo, 
+z.istransfer, z.documentos, r.sname AS recaudador, c2.descripda AS ciudad2, s.diasplz, 
+a.sname AS cajero, i.descripda AS parroquia, e.descripda AS sector, v.descripda AS provincia, 
+s.calific, s.sforpag, z.cretri, x.descripda AS tipdocextraj, s.issocio, s.smail, 
+d.isxmlenv, d.isxmlres, d.isxmlcon
+ FROM documents d   LEFT JOIN detagru b ON d.userstore = b.iddato
+		LEFT JOIN asientosdia k ON d.code = k.code
+		LEFT JOIN vsecudoc z ON d.idsecudoc = z.idsecudoc
+		LEFT JOIN imagenrep q ON z.idimage = q.idimage
+		LEFT JOIN sujetos u ON d.idugra = u.idsujeto
+		LEFT JOIN periodos o ON d.pdocode = o.pdocode
+		LEFT JOIN monedas ON o.moneda = monedas.mocode
+		LEFT JOIN sujetos s ON d.cliente = s.idsujeto
+		LEFT JOIN sujetos j ON d.seller = j.idsujeto
+		LEFT JOIN sujetos r ON d.casher = r.idsujeto
+		LEFT JOIN detagru ci ON s.sciudad = ci.iddato
+		LEFT JOIN detagru c2 ON s.sciudad2 = c2.iddato
+		LEFT JOIN detagru i ON s.parroquia = i.iddato
+		LEFT JOIN detagru e ON s.sector = e.iddato
+		LEFT JOIN detagru v ON s.sprov = v.iddato
+		LEFT JOIN sujetos a ON d.usercaja = a.idsujeto
+		LEFT JOIN sujetos t ON d.sujter = t.idsujeto
+		LEFT JOIN sujetos f ON d.chofer = f.idsujeto
+		LEFT JOIN detagru x ON s.tipdocextraj = x.iddato;
+
+ALTER TABLE vdocxml1 OWNER TO postgres;
+
+
+ALTER TABLE aneiva ADD COLUMN isxmlenv boolean DEFAULT false;
+ALTER TABLE aneiva ADD COLUMN isxmlres boolean DEFAULT false;
+
+ALTER TABLE aneiva ADD COLUMN isxmlcon boolean DEFAULT false;
+ALTER TABLE aneiva ADD COLUMN xmlclave varchar(50);
+ALTER TABLE aneiva ADD COLUMN xmlautor varchar(50);
+
+
+
+
+ALTER TABLE detadoci ADD COLUMN costoprom double precision DEFAULT 0;
+
+CREATE OR REPLACE VIEW vadqing AS 
+ SELECT a.iditem, a.fecha, a.punitario, a.costoprom
+   FROM (         SELECT s.iditem, p.fecini AS fecha, s.cospro AS punitario, s.precio AS costoprom
+                   FROM saldosi s
+              LEFT JOIN periodos p ON s.fecsaldo = p.fecini
+              where not fecini isnull
+        UNION all
+                 SELECT t.iditem, d.fecha, max(t.punitario - t.descuento / t.qty) AS punitario, max(t.costoprom) AS costoprom
+                   FROM detadoci t
+              LEFT JOIN vdocusmall d ON t.code = d.code
+             WHERE d.isaccount AND NOT d.isanulado AND (d.iddocu IN ( SELECT DISTINCT d.iddocu
+                      FROM gdoc g, dgdoc t, docuse d
+                     WHERE g.tag::text = 'ADQING'::text AND g.idgdoc = t.idgdoc AND t.dtag::text = d.dtag::text))
+             GROUP BY t.iditem, d.fecha) a;
+
+ALTER TABLE vadqing OWNER TO postgres;
+
+
+
+CREATE OR REPLACE FUNCTION salkar(idi integer, fec date, bod integer)
+  RETURNS double precision AS
+$BODY$select sum(qty)  
+from vkardex 
+where fecha<=$2 and  iditem=$1 and case when $3>0 then bodega=$3 else 'true' end
+$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100;
+  
+ALTER FUNCTION salkar(integer, date, integer)
+  OWNER TO postgres;
+
+
+
+
+
+CREATE OR REPLACE VIEW vkardex AS 
+SELECT a.iditem, a.fecha, a.punitario, a.costoprom, qty, bodega
+   FROM (         SELECT s.iditem, p.fecini AS fecha, s.cospro AS punitario, s.precio AS costoprom, qtyini as qty, bodega
+                   FROM saldosi s LEFT JOIN periodos p ON s.fecsaldo = p.fecini
+				  left join saldosib b on s.idsaldosi=b.idsaldosi
+              where not fecini isnull
+        UNION all
+                 SELECT t.iditem, d.fecha, ((t.punitario*t.qty - t.descuento) / t.qty) AS punitario, t.costoprom AS costoprom, 
+			case when tipsaldo=1 then qty*(-1) else qty end as qty, userstore as bodega
+                   FROM detadoci t
+              LEFT JOIN vdocusmall d ON t.code = d.code
+             WHERE d.isaccount AND NOT d.isanulado AND (d.iddocu IN ( SELECT DISTINCT d.iddocu
+                      FROM gdoc g, dgdoc t, docuse d
+                     WHERE g.tag::text = 'KARKAR'::text AND g.idgdoc = t.idgdoc AND t.dtag::text = d.dtag::text)) ) a ;
+
+
+select salkar(22942, '2015-02-01',  0);
+
+
+			arch_firma="quevall.p12"
+			clav_firma="ABCd1234"
+			arch_firma="quevall.p12"
+			clav_firma="ABCd1234"
+
+team
+500 387 178
+ra68e8
+
+team 
+d8x7k2

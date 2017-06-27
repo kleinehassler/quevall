@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.0.0">
+ <infoTributaria>
+    <ambiente>1</ambiente>
+   <tipoEmision>1</tipoEmision>
+   <razonSocial>CURTIEMBRé RENACIENTE S.A.</razonSocial>
+   <nombreComercial>CURTIEMBRE RENACIENTE S.A.</nombreComercial>
+   <ruc>0190004937001</ruc>
+   <claveAcceso>0709201301019000493700110030020000049381234567811</claveAcceso>
+   <codDoc>01</codDoc>
+   <estab>003</estab>
+   <ptoEmi>002</ptoEmi>
+   <secuencial>000004938</secuencial>
+   <dirMatriz>AV. PUMAPUNGO 18-123</dirMatriz>
+  </infoTributaria>
+ <infoFactura>
+    <fechaEmision>07/09/2013</fechaEmision>
+   <dirEstablecimiento>AV. C.J. AROSEMENA KM  2 1/2</dirEstablecimiento>
+   <contribuyenteEspecial>5368</contribuyenteEspecial>
+   <obligadoContabilidad>SI</obligadoContabilidad>
+   <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+   <razonSocialComprador>GOTELLI S.A.</razonSocialComprador>
+   <identificacionComprador>0992284668001</identificacionComprador>
+   <totalSinImpuestos>800.00</totalSinImpuestos>
+   <totalDescuento>0.00</totalDescuento>
+   <totalConImpuestos>
+    <totalImpuesto>
+     <codigo>2</codigo>
+     <codigoPorcentaje>2</codigoPorcentaje>
+     <baseImponible>800.00</baseImponible>
+     <valor>96.00</valor>
+    </totalImpuesto>
+   </totalConImpuestos>
+   <propina>0.00</propina>
+   <importeTotal>896.00</importeTotal>
+   <moneda>DOLAR</moneda>
+  </infoFactura>
+ <detalles>
+  <detalle>
+   <codigoPrincipal>PCPFOE12Q5P</codigoPrincipal>
+   <descripcion>CUERO CUERO PERFORADO FORD EXPLORER 3F 2012 HABANO</descripcion>
+   <cantidad>1.00</cantidad>
+   <precioUnitario>800.0000</precioUnitario>
+   <descuento>0.00</descuento>
+   <precioTotalSinImpuesto>800.00</precioTotalSinImpuesto>
+   <impuestos>
+    <impuesto>
+     <codigo>2</codigo>
+     <codigoPorcentaje>2</codigoPorcentaje>
+     <tarifa>12.00</tarifa>
+     <baseImponible>800.00</baseImponible>
+     <valor>96.00</valor>
+    </impuesto>
+   </impuestos>
+  </detalle>
+ </detalles>
+ <infoAdicional>
+    <campoAdicional nombre="Dirección">KENNEDY NORTE MZ 101 SOLAR #2  Y </campoAdicional>
+   <campoAdicional nombre="Teléfono">042290887</campoAdicional>
+   <campoAdicional nombre="Email">gsistemas@renaciente.com</campoAdicional>
+  </infoAdicional>
+</factura>

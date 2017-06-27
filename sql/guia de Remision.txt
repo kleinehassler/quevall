@@ -1,0 +1,363 @@
+DTAG del documento debe inicirar con REMI
+
+
+*************************
+** Guia de Remision Electronica
+*************************
+FUNCTION genxmlrem
+LPARAMETERS xgencode
+
+LOCAL lnFile, cFILE, xmlclavacc 
+
+CREATE CURSOR encxml (code n(10), ;
+	ambiente n(1),;
+	emision n(1),;
+	clavacc c(50),;
+	coddoc c(2),;
+	estab c(3),;
+	ptoemi c(3),;
+	secuen c(10),;
+	dirmat c(250),;
+	fecemi d(8),;
+	direstab c(250),;
+	conespec c(5),;
+	obligcnt c(2),;
+	tiposuj c(2),;
+	gremisi c(15),;
+	rsocial c(250),;
+	numidec c(13),;
+	subtot n(10,2),;
+	tdescu n(10,2),;
+	impcod1 n(1),;
+	impporc1 n(1),;
+	impbasi1 n(10,2),;
+	impval1 n(10,2),;
+	impcod2 n(1),;
+	impporc2 n(1),;
+	impbasi2 n(10,2),;
+	impval2 n(10,2),;
+	icecod n(1),;
+	icepor n(1),;
+	icebasi n(10,2),;
+	iceval n(10,2),;
+	propina n(10,2),;
+	impototal n(10,2),;
+	moneda c(15),;
+	stelf c(10) null,;
+	dirsuj c(250),;
+	chofer c(250),;
+	chcedula c(10),;
+	chruc c(13),;
+	chide c(13),;
+	chtipide c(2),;
+	ffrom d(8),;
+	fto d(8),;
+	motivo c(250),;
+	ruta c(60),;
+	placa c(10),;
+	codDocSustento c(2),;
+    numDocSustento c(20),;
+    numAutDocSustento c(40),;
+	emailsuj c(250)	 )
+
+CREATE CURSOR detxml (code n(10),;
+	codpri n(10),;
+	codaux n(10),;
+	descrip c(250),;
+	canti n(18,6),;
+	punit n(10,2),;
+	descu n(10,2),;
+	precimp n(10,2),;
+	impcod n(1),;
+	imppor n(1),;
+	imptarf n(2),;
+	impbase n(10,2),;
+	impval n(10,2),;
+	icecod n(1),;
+	icepor n(1),;
+	icetarf n(2),;
+	icebasi n(10,2),;
+	iceval n(10,2) )
+	
+CREATE CURSOR retxml (code n(10),;
+	codret n(2),;
+	codpor n(2),;
+	codtarf n(2),;
+	valor N(10,2) )
+
+q1="select * from periodos;"
+if !sqli(q1,'empperi') then
+	return
+endif
+
+select empperi
+go top
+
+
+q1="select distinct sruc, ssri, stelf, sfax, smail::char(60), saddr, siderepleg, srepleg, sruccontador, nrores, numestb, w.descripda AS ociudad from empresas e LEFT JOIN detagru w ON e.idciud = w.iddato;"
+
+if !sqli(q1,'rucempre') then
+	return
+endif
+
+select 	substr(sruc,1,13) as sruc, ;
+		substr(ssri,1,60) as ssri, ;
+		nconcero(9,stelf) as stelf, ;
+		nconcero(9,sfax) as sfax, ;
+		substr(smail,1,60) as smail1, ;
+		substr(saddr,1,60) as saddr, ;
+		substr(siderepleg,1,1) as siderepleg, ;
+		substr(srepleg,1,13) as srepleg, ;
+		nconcero(3,numestb) as numestb, ;
+		nrores, ;
+		ociudad, ;
+		substr(sruccontador,1,13) as sruccontador ;
+	from rucempre into cursor empresas
+	
+	
+cFILE="GRMELE_"+alltrim(str(xgencode))+".xml"
+
+xmlclavacc = genclaveacceso(xgencode)
+
+If len(Alltrim(xmlclavacc))<>49 then
+	wait windows 'Clave Mal Formada...' nowait
+	Return .f.
+EndIf
+
+** Llenado Cursor Encabezado XML
+q1="select * from vdocxml1 where code="+alup(xgencode)+";"
+IF !sqli(q1,'curxmle') then
+	RETURN
+ENDIF
+
+** Determinar la Ultima Factura Llenado Cursor Encabezado XML
+q1="select code, serie, num, clave, autoriza, numauto, nomdoc, to_char((c.codigo::int2)::int4,'FM09') as codDocSustento "+;
+" from vdocxml1 d left join sritabla c on (d.idsritabla=c.idsritabla) "+;
+" where cliente="+alup(curxmle.cliente)+;
+" and nomdoc like '%FAC%' order by num desc limit 1 "
+
+IF !sqli(q1,'curdatdoc') then
+	RETURN
+ENDIF
+
+*!*	q1="codeselect d.*,  a.serie as numserie2, a.num as numsecue2, a.fecha as fecha2, a.idsritabla, "+;
+*!*	"to_char((c.codigo::int2)::int4,'FM09') as docmodificado "+;
+*!*	"from vdocxml1 d left join  vdocusmall a on (d.linkdoc=a.code) "+;
+*!*	"left join sritabla c on (a.idsritabla=c.idsritabla) "+;
+*!*	"where d.code="+alup(xgencode)+";"
+
+SELECT curxmle
+GO top
+SCAN
+	SELECT encxml 
+	APPEND BLANK
+
+	Replace encxml.code 	WITH xgencode
+	Replace encxml.ambiente WITH curxmle.tipoambi    && 1 pruebas 2 produccion
+	Replace encxml.emision 	WITH empperi.tipoemi   && 1 emision normal   2 indiponiblidad del sistema
+	Replace encxml.clavacc 	WITH xmlclavacc  && generar clave de acceso 
+	Replace encxml.coddoc 	WITH "06"  && 01 fact 04 nc   05  nd  06 gremision 07  retencion
+	Replace encxml.estab 	WITH SUBSTR(nconcero(6,curxmle.serie),1,3)
+	Replace encxml.ptoemi 	WITH SUBSTR(nconcero(6,curxmle.serie),4,3)
+	Replace encxml.secuen 	WITH nconcero(9,curxmle.num)
+	Replace encxml.fecemi 	WITH curxmle.fecha
+	Replace encxml.conespec WITH nconcero(5,empresas.nrores)   && debemos almacenar en datos de la empresa
+	Replace encxml.obligcnt WITH "SI" && debemos almacenar en datos de la empresa obligcnt
+	Replace encxml.tiposuj 	WITH IIF(ALLTRIM(curxmle.sname)="CONSUMIDOR FINAL","07",IIF(LEN(ALLTRIM(curxmle.sruc))=13,"04",IIF(LEN(ALLTRIM(curxmle.scedula))=10,"05","06")))
+	Replace encxml.rsocial 	WITH ALLTRIM(solonl(curxmle.sname))
+	Replace encxml.numidec 	WITH IIF(ALLTRIM(curxmle.sname)="CONSUMIDOR FINAL","9999999999999",IIF(LEN(ALLTRIM(curxmle.sruc))=13,ALLTRIM(curxmle.sruc),IIF(LEN(ALLTRIM(curxmle.scedula))=10,ALLTRIM(curxmle.scedula),ALLTRIM(curxmle.spasaporte))))
+	Replace encxml.dirsuj   WITH ALLTRIM(solonl(curxmle.saddr))
+	Replace encxml.emailsuj WITH iif(isnull(curxmle.smail) or len(alltrim(curxmle.smail))=0,LOWER(ALLTRIM(empresas.smail1)),LOWER(ALLTRIM(curxmle.smail)) )
+	Replace encxml.subtot 	WITH curxmle.subtotal-(curxmle.descuconiva+curxmle.descusiniva)
+	Replace encxml.tdescu 	WITH curxmle.descuconiva+curxmle.descusiniva
+
+	Replace encxml.impcod1 	WITH 2 && Codigo de IVA
+	Replace encxml.impporc1	WITH 2  && cod 0 para 0%  y cod 2 para 12%   codigo 6 para no objeto de impuesto
+	Replace encxml.impbasi1	WITH curxmle.subconiva-curxmle.descuconiva
+	Replace encxml.impval1 	WITH curxmle.ivavalor
+	
+	Replace encxml.impcod2 	WITH 2
+	Replace encxml.impporc2	WITH 0 && cod 0 para 0%  y cod 2 para 12%   codigo 6 para no objeto de impuesto
+	Replace encxml.impbasi2	WITH curxmle.subsiniva-curxmle.descusiniva
+	Replace encxml.impval2	WITH 0
+
+	IF curxmle.icevalor>0.00 then
+		Replace encxml.icecod 	WITH 0
+		Replace encxml.icepor 	WITH 0
+		Replace encxml.icebasi 	WITH 0
+		Replace encxml.iceval 	WITH 0
+	ELSE
+		Replace encxml.icecod 	WITH 0
+		Replace encxml.icepor 	WITH 0
+		Replace encxml.icebasi 	WITH 0
+		Replace encxml.iceval 	WITH 0
+	endif	
+	Replace encxml.propina 	WITH 0.00
+	Replace encxml.impototal WITH curxmle.montototal
+	Replace encxml.moneda 	WITH "DOLAR"
+	*Replace encxml.stelf 	WITH iif(len(alltrim(curxmle.stelf))=0,iif(len(alltrim(curxmle.scel))=0,empresas.stelf,curxmle.scel),curxmle.stelf)
+	Replace encxml.stelf 	WITH iif(isnull(curxmle.stelf),"0000000000",iif(len(alltrim(curxmle.stelf))=0,iif(len(alltrim(curxmle.scel))=0,empresas.stelf,curxmle.scel),curxmle.stelf))
+
+	if len(alltrim(encxml.stelf))=0 then
+		Replace encxml.stelf 	WITH "000000000"
+	endif
+	
+	if len(alltrim(encxml.dirsuj))=0 then
+		Replace encxml.dirsuj   WITH "MACHALA"
+	endif
+	
+	Replace encxml.chofer 	WITH curxmle.chname
+	Replace encxml.chcedula WITH curxmle.chcedula
+	Replace encxml.chruc 	WITH curxmle.chruc
+	Replace encxml.chide    WITH iif(len(alltrim(curxmle.chruc))=13,curxmle.chruc,curxmle.chcedula)
+	Replace encxml.chtipide WITH iif(len(alltrim(curxmle.chruc))=13,"04","05")
+	Replace encxml.ffrom 	WITH curxmle.ffrom
+	Replace encxml.fto 		WITH curxmle.fto
+	Replace encxml.motivo 	WITH iif(len(alltrim(curxmle.concepto))=0,"VENTA",curxmle.concepto)
+	Replace encxml.placa	WITH iif(len(alltrim(curxmle.placa))=0,"0000000",curxmle.placa)
+	Replace encxml.ruta		WITH alltrim(empresas.ociudad)"-"alltrim(curxmle.SCIUDAD)
+	Replace encxml.codDocSustento with curdatdoc.codDocSustento 
+	Replace encxml.numDocSustento with SUBSTR(nconcero(6,curdatdoc.serie),1,3)+"-"+SUBSTR(nconcero(6,curdatdoc.serie),1,3)+"-"+nconcero(9,curdatdoc.num)
+	Replace encxml.numAutDocSustento with iif(len(alltrim(curdatdoc.numauto)=10,curdatdoc.numauto,curdatdoc.autoriza)
+	
+	
+	SELECT curxmle
+
+ENDSCAN
+
+
+** llenado de Cursor de Detalle de XML
+q1="select * from vdocui where code="+alup(xgencode)+";"
+IF !sqli(q1,'curxmld') then
+	RETURN
+ENDIF
+
+SELECT curxmld
+GO top
+SCAN
+	SELECT detxml 
+	APPEND BLANK
+	
+	Replace detxml.code 	WITH xgencode
+	Replace detxml.codpri 	WITH curxmld.iditem
+	Replace detxml.codaux 	WITH curxmld.icode
+	Replace detxml.descrip 	WITH solonl(curxmld.iname)
+	Replace detxml.canti 	WITH curxmld.qty
+
+	SELECT curxmld
+	
+ENDSCAN
+
+lnFile=FCreate(cFILE)
+If lnFile<0
+	fClose(lnFile)
+	lnFile=FCreate(cFILE)
+	If lnFile<0
+		Messagebox("Error al Crear Archivo XML",0,empresa)
+		Return(.f.)
+	EndIf	
+EndIf
+fputs(lnFile,'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>')
+fputs(lnFile,'<guiaRemision id="comprobante" version="1.0.0">')
+fputs(lnFile,"	<infoTributaria>")
+fputs(lnFile,"		<ambiente>"+alltrim(str(encxml.ambiente,5,0))+"</ambiente>")																	&&
+fputs(lnFile,"		<tipoEmision>"+alltrim(str(encxml.emision,5,0))+"</tipoEmision>")																&&
+fputs(lnFile,"		<razonSocial>"+alltrim(empresas.ssri)+"</razonSocial>")
+fputs(lnFile,"		<nombreComercial>"+alltrim(empresas.ssri)+"</nombreComercial>")
+fputs(lnFile,"		<ruc>"+alltrim(empresas.sruc)+"</ruc>")
+fputs(lnFile,"		<claveAcceso>"+alltrim(encxml.clavacc)+"</claveAcceso>")			
+fputs(lnFile,"		<codDoc>"+alltrim(encxml.coddoc)+"</codDoc>") 
+fputs(lnFile,"		<estab>"+alltrim(encxml.estab)+"</estab>") 
+fputs(lnFile,"		<ptoEmi>"+alltrim(encxml.ptoemi)+"</ptoEmi>") 
+fputs(lnFile,"		<secuencial>"+alltrim(encxml.secuen)+"</secuencial>") 
+fputs(lnFile,"		<dirMatriz>"+alltrim(empresas.saddr)+"</dirMatriz>")
+fputs(lnFile,"	</infoTributaria>")
+fputs(lnFile,"    <infoGuiaRemision>")
+fputs(lnFile,"    		  <dirEstablecimiento>"+alltrim(empresas.saddr)+"</dirEstablecimiento>")
+fputs(lnFile,"            <dirPartida>"+alltrim(empresas.saddr)+"</dirPartida>")
+fputs(lnFile,"            <razonSocialTransportista>"+alltrim(encxml.chofer)+"</razonSocialTransportista>")
+fputs(lnFile,"            <tipoIdentificacionTransportista>"+alltrim(encxml.chtipide)+"</tipoIdentificacionTransportista>")
+fputs(lnFile,"            <rucTransportista>"+alltrim(encxml.chide)+"</rucTransportista>")
+fputs(lnFile,"            <obligadoContabilidad>"+alltrim(encxml.obligcnt)+"</obligadoContabilidad>")
+fputs(lnFile,"            <contribuyenteEspecial>"+alltrim(empresas.nrores)+"</contribuyenteEspecial>")
+fputs(lnFile,"            <fechaIniTransporte>"+devfeclet(encxml.ffrom,7)+"</fechaIniTransporte>")
+fputs(lnFile,"            <fechaFinTransporte>"+devfeclet(encxml.fto,7)+"</fechaFinTransporte>")
+fputs(lnFile,"            <placa>"+alltrim(encxml.placa)+"</placa>")
+fputs(lnFile,"   	</infoGuiaRemision>")
+fputs(lnFile,"   	<destinatarios>")
+fputs(lnFile,"   	      <destinatario>")
+fputs(lnFile,"   			    <identificacionDestinatario>"+alltrim(encxml.numidec)+"</identificacionDestinatario>")
+fputs(lnFile,"   			    <razonSocialDestinatario>"+alltrim(encxml.rsocial)+"</razonSocialDestinatario>")
+fputs(lnFile,"   			    <dirDestinatario>"+alltrim(encxml.dirsuj)+"</dirDestinatario>")
+fputs(lnFile,"   			    <motivoTraslado>"+ALLTRIM(encxml.motivo)+"</motivoTraslado>")
+fputs(lnFile,"   			    <ruta>"+ALLTRIM(encxml.ruta)+"</ruta>")
+fputs(lnFile,"   			    <codDocSustento>"+ALLTRIM(encxml.codDocSustento)+"</codDocSustento>")
+fputs(lnFile,"   			    <numDocSustento>"+ALLTRIM(encxml.numDocSustento)+"</numDocSustento>")
+fputs(lnFile,"   			    <numAutDocSustento>"+ALLTRIM(encxml.numAutDocSustento)+"</numAutDocSustento>")
+fputs(lnFile,"   					<detalles>")
+SELECT detxml
+GO top
+SCAN
+fputs(lnFile,"   						<detalle>")
+fputs(lnFile,"   							<codigoInterno>"+ALLTRIM(STR(detxml.codpri,10,0))+"</codigoInterno>")
+fputs(lnFile,"   							<codigoAdicional>"+ALLTRIM(STR(detxml.codaux,10,0))+"</codigoAdicional>")
+fputs(lnFile,"   							<descripcion>"+ALLTRIM(detxml.descrip)+"</descripcion>")
+fputs(lnFile,"   							<cantidad>"+ALLTRIM(STR(detxml.canti,10,2))+"</cantidad>")
+fputs(lnFile,"   						</detalle>")
+ENDSCAN
+fputs(lnFile,"   				</detalles>")
+fputs(lnFile,"   		 </destinatario>")
+fputs(lnFile,"    </destinatarios>")
+fputs(lnFile,"<infoAdicional>")
+fputs(lnFile,'    <campoAdicional nombre="Direccion">'+alltrim(encxml.dirsuj)+'</campoAdicional>')
+fputs(lnFile,'    <campoAdicional nombre="Telefono">'+alltrim(encxml.stelf)+'</campoAdicional>')
+fputs(lnFile,'    <campoAdicional nombre="Email">'+alltrim(encxml.emailsuj)+'</campoAdicional>')
+fputs(lnFile,'</infoAdicional>')
+fputs(lnFile,"</guiaRemision>")
+fClose(lnFile)
+Wait Window "Creando Archivo de Guia de Remision Electronica XML......." NoWait 
+
+if used("encxml")
+	select encxml
+	use
+endif
+if used("detxml")
+	select detxml
+	use
+endif
+if used("retxml")
+	select retxml
+	use
+endif
+if used("rucempre")
+	select rucempre
+	use
+endif
+if used("empresas")
+	select empresas
+	use
+endif
+if used("curxmld")
+	select curxmld
+	use
+endif
+if used("curxmle")
+	select curxmle
+	use
+endif
+if used("empr")
+	select empr
+	use
+endif
+if used("cClaveConti")
+	select cClaveConti
+	use
+endif
+if used("empperi")
+	select empperi
+	use
+endif
+
+
+RETURN .t.
+ENDFUNC

@@ -1,0 +1,167 @@
+
+libfacturista
+	Programas y DLL para generar, firmar, enviar y autorizar un comprobante electronico al SRI
+	Alonso Mevaz - FacturaElectronicaEcuador.com
+
+
+facturista.conf
+	Archivo de configuracion, que le dice a la DLL el pais y otros parametros
+
+facturista.exe/facturista.bin
+	Ejecutable de ejemplo que usa a libfacturista,
+	con este puede firmar y enviar por linea de comandos
+	
+libfacturista.dll utils.dll
+	DLLs nativas necesarias para usar las funciones de libfacturista
+	usan convención de llamada cdecl ( C )
+	
+_libfacturista.dll
+	Internamente llama a las funciones de libfacturista.dll
+	Exporta las mismas funciones, precediendo el nombre de cada una
+	con _ , por ejemplo _libfacturista_version()
+	usa convención de llamada stdcall (WINAPI o Pascal) , por lo que
+	el enlazador de Microsoft le altera el nombre
+	Se proporcionan las declaraciones para VB y PB, de tal manera que
+	en su código pueda llamar las funciones sin el prefijo _
+	Visual Basic 6 y Power Builder deben enlazar con ésta
+
+libfacturista_cs.dll
+	DLL de .Net hecha en C#, puede ser referenciada desde VB.net, Dynamics AX, etc.
+	Exporta las funciones de libfacturista.dll en el espacio
+	de nombres libfacturista, usando la clase estática ansiApi, para uso con cadenas Ansi
+	exporta también la clase estática utf16Api, para uso con cadenas Unicode
+
+	El programador TIENE QUE llamar una vez a ansiApi.init() o utf16Api.init()
+	para que las funciones de esta clase hagan bien su trabajo
+	
+	Ej. para obtener la version en X++:
+		str version = libfacturista.ansiApi::libfacturista_version();
+		
+libfacturista_com.dll
+	Ensamblado .Net expuesto a COM, permite instanciar con ActiveX (COM)
+	un objeto libfacturista_com.utf16Api o libfacturista_com.ansiApi,
+	proporcionando el mismo conjunto de funciones que libfacturista.dll
+	Deberá registrar el ensamblado con:
+	regasm.exe libfacturista_com.dll /tlb /codebase
+
+xades/
+	Archivos para firmar con formato Xades BES
+	
+ejemplos/
+	Ejemplos para varios lenguajes de programación. Se ponen los archivos fuentes principales,
+	y el proyecto completo en un archivo .zip
+	Para ejecutar los ejemplos deberá copiar a la carpeta del proyecto
+	los archivos libfacturista.dll y utils.dll
+	Si requiere convencion de llamada stdcall, copie _libfacturista.dll
+	Si requiere la dll en .net, copie libfacturista_cs.dll
+	
+xades/ecuador.xml, xades/ecuador.ini
+	Facturas de ejemplo
+
+xades/usr0061.p12
+	Certificado de ejemplo con contrasena usr0061 , le servira para firmar, pero no podra ser autorizado,
+	debe usar el que le proporcione el SRI
+
+
+ejemplos/foxpro/ecuador.prg
+	Ejemplo de uso de la DLL en Foxpro
+
+
+Usted puede integrar la DLL en su proyecto declarando las funciones:
+
+cfdi_xml_cargar, cfdi_sellar, cfdi_timbrar, cfdi_resultado y cfdi_error
+
+las cuales encontrara en libfacturista_ec.prg .
+
+
+// Carga el XML o INI del archivo rutaFuente en el manejador h, devuelve el nuevo valor para el manejador
+// Valores devueltos: != 0 éxito , == 0 falla
+int cfdi_xml_cargar(int h, string rutaFuente);
+
+
+// Firma el XML asociado al manejador h, el resultado se guarda en rutaDestino
+// decorar=1 indica si dejará espacios y saltos de línea entre las etiquetas
+// Se usa para mejorar la legibilidad en un editor simple
+// decorar=0 es la opción recomendada por compatibilidad con otros analizadores XML
+// Valores devueltos: != 0 éxito , == 0 falla
+int cfdi_sellar(int h, string rutaLlavePrivada, string contrasena, string rutaDestino, int decorar);
+
+
+// La cadena 'parametros' son pares nombre=valor separados por ';', varios están relacionados con el webservice del SRI
+// Si omite Servidor y Puerto se usara el servidor de pruebas. Es preferible especificarlos porque el SRI
+// podría cambiar el nombre o puerto de su servidor
+// reservado debe ser 0
+// Valores devueltos: != 0 éxito , == 0 falla
+int cfdi_timbrar(int h, string rutaFuente, string rutaDestino, int reservado, string parametros);
+
+
+// Devuelve la cadena de resultado de la ultima operación relacionada con el manejador h
+// La ultima operación debió ser exitosa
+// Solo debe llamarse si la funcion llamada anteriormente especifica que pone un valor en la cadena de resultado
+string cfdi_resultado(int h);
+
+// Devuelve la cadena que describe el error relacionado con el manejador h
+string cfdi_error(int h);
+
+
+	
+
+Nota: Para firmar se requiere tener Java 1.6 o superior.
+
+
+
+----------
+
+
+Instrucciones para usar libfacturista en Ecuador
+
+
+De preferencia ponga todos los archivos del .zip , excepto la carpeta ejemplos/ y el leeme.txt .
+El archivo facturista.conf es obligatorio.
+
+La version del comprobante debe ser 1.0.0
+
+Si la cadena de error devuelta por cfdi_error() es grande, pongala en un archivo y ahi podrá leer los errores.
+
+
+Para sistemas de 64 bits, la DLL (que es de 32 bits) y los programas que la usen deben estar en un subdirectorio dentro de
+C:\Program Files (x86) o C:\Archivos de Programa (x86)
+
+Esto porque ahí Windows lo identifica y carga los componentes adecuados de 32 bits.
+
+Debe tener instalado Java de 32 bits.
+
+Asegurarse que los usuarios tienen permiso de escritura en la carpeta de la DLL, pues se crean archivos intermedios durante
+la firma.
+
+
+
+
+Tomar en cuenta también:
+
+Pag. 5 del instructivo del SRI:
+
+4.3 La solicitud de certificación para los ambientes de pruebas y producción deberá realizarla
+    directamente a través del Portal WEB del SRI (Servicios en Línea), recuerde que debe
+    encontrarse en estado activo y al día en sus obligaciones tributarias para evitar cualquier
+    tipo de sanción posteriormente, esta solicitud se realizará por una sola vez para cada
+    ambiente.
+      -  La solicitud de autorización en el ambiente de pruebas es obligatorio para todos los
+         solicitantes, puesto que en este proceso los emisores podrán realizar todas sus
+         acciones en desarrollo ejecutando y verificando que los comprobantes electrónicos
+         cumplan con los esquemas XSD, así como el tipo de firma electrónica incorporada en
+         los comprobantes, se verificará adicionalmente la conexión con los enlaces a través de
+         Web Services que se utilizarán para solicitar la autorización de los comprobantes
+         electrónicos generados y recibir la respuesta de manera inmediata por parte de la
+         Administración Tributaria; cabe mencionar que estos comprobantes emitidos en
+         ambiente de "pruebas" no tendrán validez tributaria.
+
+
+Pag. 38
+"Para el desarrollo de los XML de cualquier comprobante, se recuerda que los campos de tipo
+alfanumérico no deberán contener espacios generados con enter entre sus caracteres, ya que esto
+será motivo de error de esquema que puede ocasionar rechazo del comprobante o falta de respuesta
+en el envío;"
+
+
+

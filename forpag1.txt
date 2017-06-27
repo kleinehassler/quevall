@@ -1,0 +1,66 @@
+
+Hola Kleine, me puse a revisar el formulario de forma de pagos, para ver por que no se estaba registrando el saldo en un documento, y me di cuenta que habia un error por que no se cargaba el iddocu correcto al momento de inicializar el formulario, aqui te envio todo el procedimiento init del FORPAG.
+
+para bode, clien, caje, subcon, subsin, descucon, descusin, flete, ivava, iceva, recar, fecha, ;
+    pori, subto, recar2, monto, nume, dtag, idse
+
+
+q1="select sname from sujetos where idsujeto="+alup(clien)
+if sqli(q1,'sujeto')
+    this.snamey=sujeto.sname
+endif
+
+q1="select nomdoc, iddocu from docuse where dtag="+alup(dtag)
+if sqli(q1,'docu')
+    this.nomdocy=docu.nomdoc
+endif
+
+q1="select descripda from detagru where iddato="+alup(bode)
+if sqli(q1,'bod')
+    this.bodegay=bod.descripda
+endif
+
+this.fechay=fecha
+this.subconivay=subcon
+this.subsinivay=subsin
+this.subtotaly=subto
+this.descuconivay=descucon
+this.descusinivay=descusin
+this.ivavalory=ivava
+this.icevalory=iceva
+this.recargoy=recar
+this.recargo2y=recar2
+this.fletey=flete
+this.montototaly=monto
+this.numy=nume
+this.idsecudocy=idse
+this.clien=clien
+
+this.iddocu=docu.iddocu
+
+Como veras, he adjuntado el iddocu de la consulta docu que esta en una de las consultas anteriores. Hice las pruebas del caso y se soluciono el problema.
+
+Para que puedas actualizar todas las transacciones que debian registrar saldo, hice una funcion para calcular el saldo inicial en un documento, aqui esta:
+
+CREATE OR REPLACE FUNCTION saldoinidoc(cod integer)
+  RETURNS double precision AS
+$BODY$select distinct  sum(c.valor)
+from vdocusmall d left join cobros c on (d.code=c.code )
+          left join ddocuse s on (d.iddocu=s.iddocu and c.rubcode=s.rubcode )
+where s.issaldo and not isanulado and isaccount and tmpsaldo=0 and d.code=$1$BODY$
+  LANGUAGE 'sql' VOLATILE
+  COST 100;
+ALTER FUNCTION saldoinidoc(integer) OWNER TO postgres;
+
+luego ejecute la actualizacion en la tabla documentos:
+
+update documents set tmpsaldo=saldoinidoc(code), saldo=saldoinidoc(code)
+where tmpsaldo=0 and saldoinidoc(code)>0 and code not in (select distinct coded from detadocd);
+
+Espero que todo quede bien, tal vez por esto es que no te imprimia el saldo correcto en la factura, me avisas cualquier novedad.
+
+
+Saludos.
+
+Daniel.
+

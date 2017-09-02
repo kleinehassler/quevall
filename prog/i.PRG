@@ -1,5 +1,5 @@
 local ruta
-ruta=sys(2003)+'\bdd;'+sys(2003)+'\prog;'+sys(2003)+'\form;'+sys(2003)+'\report;'+sys(2003)+'\varios;'+sys(2003)+'\migracion'
+ruta=sys(2003)+'\bdd;'+sys(2003)+'\prog;'+sys(2003)+'\form;'+sys(2003)+'\form2;'+sys(2003)+'\report;'+sys(2003)+'\varios;'+sys(2003)+'\migracion'
 SET PATH TO &ruta
 ruta=sys(2003)+'\tempo'
 SET DEFA TO &ruta
@@ -114,7 +114,7 @@ cgru=''
 q1=''
 
 *basedd='artiplast15'
-basedd='quevall16'
+basedd='quevall17'
 
 x=0
 consindes=.f.

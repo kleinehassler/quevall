@@ -1,0 +1,532 @@
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=444980;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=445054 and nudocban<=445081;
+--	
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=445024;
+--	
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=445239;
+--	
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=445710;
+--		
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=445888;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=445970 and nudocban<=445979;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446161;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446146;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446433;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446434;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446597;
+	
+--
+
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446640;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446707;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=446750;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447115;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447126;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447142;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447175;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447176;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447177;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447200;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=442739;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447234;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447299;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447314;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447332;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447349;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447350;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447397;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447398;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447403;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447404;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447405;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447408;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447409;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447431;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447432;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447436;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447438;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447447;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447457;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447470;
+	
+--	
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447470 and nudocban<=447471;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447479;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447492 and nudocban<=447493;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447508 and nudocban<=447510;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447513 and nudocban<=447514;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447517 and nudocban<=447518;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447520 and nudocban<=447525;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447529 and nudocban<=447532;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447536;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447550;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447552 and nudocban<=447553;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447559 and nudocban<=447561;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447563;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447565 and nudocban<=447566;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447568 and nudocban<=447569;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447571 and nudocban<=447572;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447575 and nudocban<=447576;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447580 and nudocban<=447584;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447586 and nudocban<=447588;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447590 and nudocban<=447596;
+	
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447693 and nudocban<=447695;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447598;
+---
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447603 and nudocban<=447608;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447610 and nudocban<=447621;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447624 and nudocban<=447633;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447635 and nudocban<=447637;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447639 and nudocban<=447648;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447651 and nudocban<=447653;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447656 and nudocban<=447659;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447667 and nudocban<=447669;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447671 and nudocban<=447707;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447710;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447712;
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447713 and nudocban<=447750;
+--
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447753 and nudocban<=447774;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban=447777;
+
+--
+
+update detadocb set qty=2 where isconfbanc='false' and 
+	idcuenta=11986 and isanulado='false' and 
+	isconciliado='false' and isprotesto='false' and 
+	isaccount='true' and tipodoc=1277 and nudocban>=447814 and nudocban<=447815;
+--
+
+	
+	
+
+
+	delete from detadocb where isconfbanc='false' and 
+		idcuenta=11986 and isanulado='false' and 
+		isconciliado='false' and isprotesto='false' and 
+		isaccount='true' and tipodoc=1277 and qty=1 and fecha>='2015-01-01' and fecha<='2016-12-31';
+
+---	
+update detadocb set qty=1 where qty=2;
+
+SELECT * FROM DETADOCB WHERE QTY=2
